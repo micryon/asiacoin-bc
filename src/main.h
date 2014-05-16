@@ -26,18 +26,20 @@ class CInv;
 class CRequestTracker;
 class CNode;
 
-static const int LAST_POW_BLOCK = 10000;
+//static const int LAST_POW_BLOCK = 10000;
 
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
-static const int64_t MIN_TX_FEE = 10000;
+static const int64_t MIN_TX_FEE = 0.1 * CENT;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
-static const int64_t MAX_MONEY = 2000000000 * COIN;
-static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
-
+static const int64_t MAX_MONEY = 7200000000 * COIN;			// Micryon 7.2 billion coins for 2% interest stake for several hundred years (hopefully).. also this allows us to revert some bad code used to hide the premine
+//static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
+static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.10 * COIN;	// 10% annual interest
+static const int64_t MIN_TXOUT_AMOUNT = MIN_TX_FEE;
+static const int64_t MAX_TX_FEE = MAX_MONEY / COIN;
 inline bool MoneyRange(int64_t nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
 static const unsigned int LOCKTIME_THRESHOLD = 500000000; // Tue Nov  5 00:53:20 1985 UTC
@@ -48,8 +50,9 @@ static const int fHaveUPnP = true;
 static const int fHaveUPnP = false;
 #endif
 
-static const uint256 hashGenesisBlock("0x000001faef25dec4fbcf906e6242621df2c183bf232f263d0ba5b101911e4563");
-static const uint256 hashGenesisBlockTestNet("0x0000724595fb3b9609d441cbfb9577615c292abf07d996d3edabc48de843642d");
+static const uint256 hashGenesisBlock("0x000004621b7993a863f39691b0520c22bc5c1674fbc01eb5924d34503e3d92db");
+static const uint256 hashGenesisBlockOfficial("0x000004621b7993a863f39691b0520c22bc5c1674fbc01eb5924d34503e3d92db");
+static const uint256 hashGenesisBlockTestNet ("0x000004621b7993a863f39691b0520c22bc5c1674fbc01eb5924d34503e3d92db");
 
 inline int64_t PastDrift(int64_t nTime)   { return nTime - 10 * 60; } // up to 10 minutes from the past
 inline int64_t FutureDrift(int64_t nTime) { return nTime + 10 * 60; } // up to 10 minutes from the future
@@ -835,7 +838,7 @@ class CBlock
 {
 public:
     // header
-    static const int CURRENT_VERSION=6;
+    static const int CURRENT_VERSION=4;
     int nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;

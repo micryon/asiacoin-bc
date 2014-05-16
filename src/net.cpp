@@ -373,7 +373,7 @@ bool GetMyExternalIP(CNetAddr& ipRet)
 
             pszGet = "GET / HTTP/1.1\r\n"
                      "Host: checkip.dyndns.org\r\n"
-                     "User-Agent: AsiaCoin\r\n"
+                     "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)\r\n"
                      "Connection: close\r\n"
                      "\r\n";
 
@@ -392,7 +392,7 @@ bool GetMyExternalIP(CNetAddr& ipRet)
 
             pszGet = "GET /simple/ HTTP/1.1\r\n"
                      "Host: www.showmyip.com\r\n"
-                     "User-Agent: AsiaCoin\r\n"
+                     "User-Agent: Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)\r\n"
                      "Connection: close\r\n"
                      "\r\n";
 
@@ -1139,8 +1139,7 @@ void MapPort()
 // The first name is used as information source for addrman.
 // The second name should resolve to a list of seed addresses.
 static const char *strDNSSeed[][2] = {
-    {"rat4.asiacoin.co", "seed.asiacoin.co"},
-    {"maarx.asiacoin.co", "seed2.asiacoin.co"},
+    {"planetdollar.org", "dnsseedac.planetdollar.org"},
 };
 
 void ThreadDNSAddressSeed(void* parg)
@@ -1211,14 +1210,7 @@ void ThreadDNSAddressSeed2(void* parg)
 
 unsigned int pnSeed[] =
 {
-    0xdf4bd379, 0x7934d29b, 0x26bc02ad, 0x7ab743ad, 0x0ab3a7bc,
-    0x375ab5bc, 0xc90b1617, 0x5352fd17, 0x5efc6c18, 0xccdc7d18,
-    0x443d9118, 0x84031b18, 0x347c1e18, 0x86512418, 0xfcfe9031,
-    0xdb5eb936, 0xef8d2e3a, 0xcf51f23c, 0x18ab663e, 0x36e0df40,
-    0xde48b641, 0xad3e4e41, 0xd0f32b44, 0x09733b44, 0x6a51f545,
-    0xe593ef48, 0xc5f5ef48, 0x96f4f148, 0xd354d34a, 0x36206f4c,
-    0xceefe953, 0x50468c55, 0x89d38d55, 0x65e61a5a, 0x16b1b95d,
-    0x702b135e, 0x0f57245e, 0xdaab5f5f, 0xba15ef63,
+		0xD0E0AA6B, 0xE98CF8A2, 0x094E0CC6, 0x0B1EF5AC, 0x328603C0, 0x21F1FCA2
 };
 
 void DumpAddresses()
