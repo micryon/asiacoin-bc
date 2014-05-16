@@ -1738,11 +1738,11 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     // Set output amount
     if (txNew.vout.size() == 3)
     {
-        txNew.vout[1].nValue = (nCredit / 2 / CENT) * CENT;
-        txNew.vout[2].nValue = nCredit - txNew.vout[1].nValue;
+            txNew.vout[1].nValue = ((nCredit - nMinFee) / 2 / CENT) * CENT;
+            txNew.vout[2].nValue = nCredit - nMinFee - txNew.vout[1].nValue;
     }
     else
-        txNew.vout[1].nValue = nCredit;
+            txNew.vout[1].nValue = nCredit - nMinFee;
 
     // Sign
     int nIn = 0;
@@ -1756,6 +1756,20 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     unsigned int nBytes = ::GetSerializeSize(txNew, SER_NETWORK, PROTOCOL_VERSION);
     if (nBytes >= MAX_BLOCK_SIZE_GEN/5)
         return error("CreateCoinStake : exceeded coinstake size limit");
+
+        // Check enough fee is paid
+        if (nMinFee < txNew.GetMinFee() - MIN_TX_FEE)
+        {
+            nMinFee = txNew.GetMinFee() - MIN_TX_FEE;
+            continue; // try signing again
+        }
+        else
+        {
+            if (fDebug && GetBoolArg("-printfee"))
+                printf("CreateCoinStake : fee for coinstake %s\n", FormatMoney(nMinFee).c_str());
+            break;
+        }
+    }
 
     // Successfully generated coinstake
     return true;
