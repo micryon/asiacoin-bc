@@ -1,4 +1,5 @@
 
+
 AsiaCoin is a 100% pure POS currency
 
 AsiaCoin v2.1.0.0 (non breaking update)
