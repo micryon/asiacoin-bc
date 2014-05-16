@@ -11,12 +11,20 @@ using namespace std;
 
 typedef std::map<int, unsigned int> MapModifierCheckpoints;
 
+extern int nStakeMaxAge;
+extern int nStakeTargetSpacing;
+
+// Modifier interval: time to elapse before new modifier is computed
+// Set to 3-hour for production network and 20-minute for test network
+
+unsigned int nModifierInterval = MODIFIER_INTERVAL;
+
 // Hard checkpoints of stake modifiers to ensure they are deterministic
 static std::map<int, unsigned int> mapStakeModifierCheckpoints =
     boost::assign::map_list_of
         ( 0, 0x0e00670bu )
-        ( 1600, 0x1b3404a2 )
-        ( 7000, 0x4da1176e )
+        
+        
     ;
 
 // Hard checkpoints of stake modifiers to ensure they are deterministic (testNet)
@@ -85,8 +93,9 @@ static bool SelectBlockFromCandidates(vector<pair<int64_t, uint256> >& vSortedBy
             continue;
         // compute the selection hash by hashing its proof-hash and the
         // previous proof-of-stake modifier
+        uint256 hashProof = pindex->IsProofOfStake()? pindex->hashProofOfStake : pindex->GetBlockHash();
         CDataStream ss(SER_GETHASH, 0);
-        ss << pindex->hashProof << nStakeModifierPrev;
+        ss << hashProof << nStakeModifierPrev;
         uint256 hashSelection = Hash(ss.begin(), ss.end());
         // the selection hash is divided by 2**32 so that proof-of-stake block
         // is always favored over proof-of-work block. this is to preserve
@@ -280,9 +289,15 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
 
     uint256 hashBlockFrom = blockFrom.GetHash();
 
-    CBigNum bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64_t)txPrev.nTime, (int64_t)nTimeTx) / COIN / (24 * 60 * 60);
-    targetProofOfStake = (bnCoinDayWeight * bnTargetPerCoinDay).getuint256();
+    //CBigNum bnCoinDayWeight = CBigNum(nValueIn) * GetWeight((int64_t)txPrev.nTime, (int64_t)nTimeTx) / COIN / (24 * 60 * 60);
+    //targetProofOfStake = (bnCoinDayWeight * bnTargetPerCoinDay).getuint256();
+    // v0.3 protocol kernel hash weight starts from 0 at the min age
+    // this change increases active coins participating the hash and helps
+    // to secure the network when proof-of-stake difficulty is low
+    int64_t nTimeWeight = min((int64_t)nTimeTx - txPrev.nTime, (int64_t)nStakeMaxAge) - nStakeMinAge;
+    CBigNum bnCoinDayWeight = CBigNum(nValueIn) * nTimeWeight / COIN / (24 * 60 * 60);
 
+	// printf(">>> CheckStakeKernelHash: nTimeWeight = %"PRI64d"\n", nTimeWeight);
     // Calculate hash
     CDataStream ss(SER_GETHASH, 0);
     uint64_t nStakeModifier = 0;
@@ -310,7 +325,14 @@ bool CheckStakeKernelHash(unsigned int nBits, const CBlock& blockFrom, unsigned 
 
     // Now check if proof-of-stake hash meets target protocol
     if (CBigNum(hashProofOfStake) > bnCoinDayWeight * bnTargetPerCoinDay)
+	{
+		// printf(">>> bnCoinDayWeight = %s, bnTargetPerCoinDay=%s\n", 
+		//	bnCoinDayWeight.ToString().c_str(), bnTargetPerCoinDay.ToString().c_str()); 
+		// printf(">>> CheckStakeKernelHash - hashProofOfStake too much\n");
         return false;
+	}
+
+
     if (fDebug && !fPrintProofOfStake)
     {
         printf("CheckStakeKernelHash() : using modifier 0x%016"PRIx64" at height=%d timestamp=%s for block from height=%d timestamp=%s\n",
@@ -381,6 +403,7 @@ unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
 // Check stake modifier hard checkpoints
 bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierChecksum)
 {
+	if (fTestNet) return true;
     MapModifierCheckpoints& checkpoints = (fTestNet ? mapStakeModifierCheckpointsTestNet : mapStakeModifierCheckpoints);
 
     if (checkpoints.count(nHeight))
