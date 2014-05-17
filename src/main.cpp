@@ -35,7 +35,6 @@ unsigned int nTransactionsUpdated = 0;
 map<uint256, CBlockIndex*> mapBlockIndex;
 set<pair<COutPoint, unsigned int> > setStakeSeen;
 
-uint256 hashGenesisBlock = hashGenesisBlockOfficial;
 libzerocoin::Params* ZCParams;
 
 unsigned int nStakeMinAge = 60 * 60 * 24 * 14;	// minimum age for coin age: 14d
@@ -996,12 +995,7 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
     return pblockOrphan->hashPrevBlock;
 }
 
-int generateMTRandom(unsigned int s, int range)
-{
-	random::mt19937 gen(s);
-    random::uniform_int_distribution<> dist(0, range);
-    return dist(gen);
-}
+
 static const int64_t nMinSubsidy = 1 * COIN;
 static const int CUTOFF_HEIGHT = 20160;	// Height at the end of 14 days
 // miner's coin base reward based on nBits
@@ -1072,8 +1066,11 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, unsigned int nBits, unsigned int
 
 	
     int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
-	if (fDebug && GetBoolArg("-printcreation"))
-        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRI64d" nBits=%d\n", FormatMoney(nSubsidy).c_str(), nCoinAge, nBits);
+    if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+
+
+
 
     return nSubsidy;
 }
@@ -2115,17 +2112,9 @@ bool CBlock::AddToBlockIndex(unsigned int nFile, unsigned int nBlockPos, const u
     // ppcoin: compute stake entropy bit for stake modifier
     if (!pindexNew->SetStakeEntropyBit(GetStakeEntropyBit()))
         return error("AddToBlockIndex() : SetStakeEntropyBit() failed");
-
-    // ppcoin: record proof-of-stake hash value
-    if (pindexNew->IsProofOfStake())
-    {
-        if (!mapProofOfStake.count(hash))
-            return error("AddToBlockIndex() : hashProofOfStake not found in map");
-        pindexNew->hashProofOfStake = mapProofOfStake[hash];
-    }
-
+   
     // Record proof hash value
-    //pindexNew->hashProof = hashProof;
+    pindexNew->hashProof = hashProof;
 
     // ppcoin: compute stake modifier
     uint64_t nStakeModifier = 0;
