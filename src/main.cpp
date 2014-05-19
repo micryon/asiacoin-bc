@@ -23,6 +23,7 @@ using namespace boost;
 //
 // Global state
 //
+static const int CUTOFF_HEIGHT = 20160;	// Height at the end of 14 days
 
 CCriticalSection cs_setpwalletRegistered;
 set<CWallet*> setpwalletRegistered;
@@ -53,7 +54,6 @@ static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
 
 unsigned int nTargetSpacing = nStakeTargetSpacing; // 1 minute
-unsigned int nModifierInterval = 10 * 60; // time to elapse before new modifier is computed
 
 
 CBlockIndex* pindexGenesisBlock = NULL;
@@ -997,7 +997,7 @@ uint256 WantedByOrphan(const CBlock* pblockOrphan)
 
 
 static const int64_t nMinSubsidy = 1 * COIN;
-static const int CUTOFF_HEIGHT = 20160;	// Height at the end of 14 days
+
 // miner's coin base reward based on nBits
 int64_t GetProofOfWorkReward(int nHeight, int64_t nFees)
 {
@@ -2384,13 +2384,13 @@ uint256 CBlockIndex::GetBlockTrust() const
     if (IsProofOfStake())
     {
         // Return trust score as usual
-        return (CBigNum(1)<<256) / (bnTarget+1);
+        return ((CBigNum(1)<<256) / (bnTarget+1)).getuint256();
     }
     else
     {
         // Calculate work amount for block
         CBigNum bnPoWTrust = (bnProofOfWorkLimit / (bnTarget+1));
-        return bnPoWTrust > 1 ? bnPoWTrust : 1;
+        return bnPoWTrust > 1 ? bnPoWTrust.getuint256() : 1;
     }
 }
 
@@ -2424,20 +2424,6 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock)
     // Preliminary checks
     if (!pblock->CheckBlock())
         return error("ProcessBlock() : CheckBlock FAILED");
-
-    // ppcoin: verify hash target and signature of coinstake tx
-    if (pblock->IsProofOfStake())
-    {
-        uint256 hashProofOfStake = 0;
-        if (!CheckProofOfStake(pblock->vtx[1], pblock->nBits, hashProofOfStake))
-        {
-            printf("WARNING: ProcessBlock(): check proof-of-stake failed for block %s\n", hash.ToString().c_str());
-            return false; // do not error here as we expect this during initial block download
-        }
-
-        if (!mapProofOfStake.count(hash)) // add to mapProofOfStake
-            mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
-    }
 
     CBlockIndex* pcheckpoint = Checkpoints::GetLastSyncCheckpoint();
     if (pcheckpoint && pblock->hashPrevBlock != hashBestChain && !Checkpoints::WantedByPendingSyncCheckpoint(hash))

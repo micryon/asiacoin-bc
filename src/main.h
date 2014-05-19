@@ -26,7 +26,7 @@ class CInv;
 class CRequestTracker;
 class CNode;
 
-//static const int LAST_POW_BLOCK = 10000;
+static const int LAST_POW_BLOCK = 20160;
 
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
 static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
@@ -36,7 +36,7 @@ static const unsigned int MAX_INV_SZ = 50000;
 static const int64_t MIN_TX_FEE = 0.1 * CENT;
 static const int64_t MIN_RELAY_TX_FEE = MIN_TX_FEE;
 static const int64_t MAX_MONEY = 7200000000 * COIN;			// Micryon 7.2 billion coins for 2% interest stake for several hundred years (hopefully).. also this allows us to revert some bad code used to hide the premine
-//static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
+static const int64_t COIN_YEAR_REWARD = 1 * CENT; // 1% per year
 static const int64_t MAX_MINT_PROOF_OF_STAKE = 0.10 * COIN;	// 10% annual interest
 static const int64_t MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 static const int64_t MAX_TX_FEE = MAX_MONEY / COIN;
