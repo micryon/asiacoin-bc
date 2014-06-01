@@ -23,17 +23,17 @@ Value getsubsidy(const Array& params, bool fHelp)
 	if(params.size() == 1 ) // Take nHeight from RPC parameter
 	{
 		const Object& oparam = params[0].get_obj();
-        const Value& modeval = find_value(oparam, "mode");
-        if (modeval.type() == int_type)
-        {
-            int nHeight = modeval.get_int();
+		const Value& modeval = find_value(oparam, "mode");
+		if (modeval.type() == int_type)
+		{
+			int nHeight = modeval.get_int();
 			return GetProofOfWorkReward(nHeight, 0);
 		}
 	}
 	else // Use nHeight of current block
 		return GetProofOfWorkReward(pindexBest->nHeight, 0);
-
 }
+
 
 Value getmininginfo(const Array& params, bool fHelp)
 {
