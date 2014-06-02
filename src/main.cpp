@@ -1159,6 +1159,7 @@ static unsigned int GetNextTargetRequiredV1(const CBlockIndex* pindexLast, bool 
     return bnNew.GetCompact();
 }
 
+/* Unused
 static unsigned int GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool fProofOfStake)
 {
     CBigNum bnTargetLimit = fProofOfStake ? bnProofOfStakeLimit : bnProofOfWorkLimit;
@@ -1190,6 +1191,7 @@ static unsigned int GetNextTargetRequiredV2(const CBlockIndex* pindexLast, bool 
 
     return bnNew.GetCompact();
 }
+*/
 
 unsigned int GetNextTargetRequired(const CBlockIndex* pindexLast, bool fProofOfStake)
 {    
@@ -1624,9 +1626,11 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
+
+    /* Unused
     bool fEnforceBIP30 = true; // Always active in AsiaCoin
     bool fStrictPayToScriptHash = true; // Always active in AsiaCoin
-
+    */
     //// issue here: it doesn't know the version
     unsigned int nTxPos;
     if (fJustCheck)
