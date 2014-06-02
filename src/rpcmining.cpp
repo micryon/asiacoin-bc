@@ -15,23 +15,26 @@ using namespace std;
 
 Value getsubsidy(const Array& params, bool fHelp)
 {
-    if (fHelp || params.size() > 1)
-        throw runtime_error(
-            "getsubsidy [nTarget]\n"
-            "Returns proof-of-work subsidy value for the specified value of target.");
+	if (fHelp || params.size() > 1)
+		throw runtime_error(
+		"getsubsidy [nTarget]\n"
+		"Returns proof-of-work subsidy value for the specified value of target.");
 
-	if(params.size() == 1 ) // Take nHeight from RPC parameter
+	Object obj;
+	if(params.size() == 1 ) // Use nHeight from RPC parameter
 	{
 		const Object& oparam = params[0].get_obj();
 		const Value& modeval = find_value(oparam, "mode");
 		if (modeval.type() == int_type)
 		{
 			int nHeight = modeval.get_int();
-			return GetProofOfWorkReward(nHeight, 0);
+			obj.push_back(Pair("getsubsidy", (uint64_t)GetProofOfWorkReward(nHeight, 0) ));
 		}
 	}
 	else // Use nHeight of current block
-		return GetProofOfWorkReward(pindexBest->nHeight, 0);
+		obj.push_back(Pair("getsubsidy", (uint64_t)GetProofOfWorkReward(pindexBest->nHeight, 0) ));
+		
+	return obj;
 }
 
 
