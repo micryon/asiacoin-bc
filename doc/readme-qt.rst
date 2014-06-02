@@ -4,18 +4,16 @@ AsiaCoin-qt: Qt5 GUI for AsiaCoin
 Build instructions
 ===================
 
-Debian
--------
+Debian/Ubuntu
+-------------
 
-First, make sure that the required packages for Qt5 development of your
-distribution are installed, for Debian and Ubuntu these are:
+First, install the required packages that your system may be missing, by executing:
 
 ::
 
-    apt-get install qt5-default qt5-qmake qtbase5-dev-tools qttools5-dev-tools \
-        build-essential libboost-dev libboost-system-dev \
-        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev \
-        libssl-dev libdb++-dev
+    sudo apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
+        libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev \
+        libdb5.3++-dev libminiupnpc-dev
 
 then execute the following:
 
