@@ -3,6 +3,8 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include <boost/lexical_cast.hpp>
+#include <string>
 #include "main.h"
 #include "db.h"
 #include "txdb.h"
@@ -13,6 +15,8 @@
 using namespace json_spirit;
 using namespace std;
 
+const int HIGHEST_POW_BLOCK =  20160;
+
 Value getsubsidy(const Array& params, bool fHelp)
 {
 	if (fHelp || params.size() > 1)
@@ -20,21 +24,19 @@ Value getsubsidy(const Array& params, bool fHelp)
 		"getsubsidy [nTarget]\n"
 		"Returns proof-of-work subsidy value for the specified value of target.");
 
-	Object obj;
-	if(params.size() == 1 ) // Use nHeight from RPC parameter
+	int nHeight;
+	if(params.size() == 1 ) // Take nHeight from RPC parameter
 	{
-		const Object& oparam = params[0].get_obj();
-		const Value& modeval = find_value(oparam, "mode");
-		if (modeval.type() == int_type)
-		{
-			int nHeight = modeval.get_int();
-			obj.push_back(Pair("getsubsidy", (uint64_t)GetProofOfWorkReward(nHeight, 0) ));
-		}
+		std::string aString = params[0].get_str();
+		nHeight = boost::lexical_cast<int>(aString);
+		if ((nHeight > HIGHEST_POW_BLOCK) || (nHeight < 1))
+			throw runtime_error("The block number you've entered is out of range.\n"
+			"POW block numbers range from 1 to 20,160.");
 	}
-	else // Use nHeight of current block
-		obj.push_back(Pair("getsubsidy", (uint64_t)GetProofOfWorkReward(pindexBest->nHeight, 0) ));
+	else // Take nHeight from current block number
+		nHeight = pindexBest->nHeight;
 		
-	return obj;
+	return ValueFromAmount(GetProofOfWorkReward(nHeight, 0));
 }
 
 
