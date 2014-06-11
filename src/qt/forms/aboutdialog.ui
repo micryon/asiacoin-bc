@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="pixmap">
-      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+      <pixmap resource="../bitcoin.qrc">:/images/about_logo</pixmap>
      </property>
     </widget>
    </item>
