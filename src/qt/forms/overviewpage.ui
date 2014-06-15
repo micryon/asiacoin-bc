@@ -13,8 +13,12 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
+
+  <!-- Whole page-->
   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1">
    <item>
+
+    <!-- Upper left box -->
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
       <widget class="QFrame" name="frame">
@@ -26,6 +30,8 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
         <item>
+
+         <!-- Title and sync indicator -->
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QLabel" name="label_5">
@@ -73,6 +79,8 @@
          </layout>
         </item>
         <item>
+
+         <!-- Wallet properties -->
          <layout class="QFormLayout" name="formLayout_2">
           <property name="fieldGrowthPolicy">
            <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
@@ -196,6 +204,8 @@
             </property>
            </widget>
           </item>
+
+          <!-- Divider line -->
           <item row="4" column="0" colspan="2">
            <widget class="Line" name="line">
             <property name="orientation">
@@ -203,6 +213,8 @@
             </property>
            </widget>
           </item>
+
+          <!-- Total -->
           <item row="5" column="0">
            <widget class="QLabel" name="labelTotalText">
             <property name="text">
@@ -250,9 +262,32 @@
        </property>
       </spacer>
      </item>
+
+    <!-- AsiaCoin logo -->
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="pixmap">
+        <pixmap resource="../bitcoin.qrc">:/images/overview_logo</pixmap>
+       </property>
+       <property name="scaledContents">
+        <bool>false</bool>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="margin">
+        <number>-2</number>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
+
+    <!-- Upper right box -->
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <widget class="QFrame" name="frame_2">
@@ -264,6 +299,8 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
+
+         <!-- Title and sync indicator -->
          <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
            <widget class="QLabel" name="label_4">
@@ -303,6 +340,8 @@
           </item>
          </layout>
         </item>
+
+        <!-- Transactions list -->
         <item>
          <widget class="QListView" name="listTransactions">
           <property name="styleSheet">
