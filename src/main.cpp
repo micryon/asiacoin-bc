@@ -2818,7 +2818,7 @@ bool LoadBlockIndex(bool fAllowNew)
     }
 
     string strPubKey = "";
-
+/*
     // if checkpoint master key changed must reset sync-checkpoint
     if (!txdb.ReadCheckpointPubKey(strPubKey) || strPubKey != CSyncCheckpoint::strMasterPubKey)
     {
@@ -2831,7 +2831,7 @@ bool LoadBlockIndex(bool fAllowNew)
         if ((!fTestNet) && !Checkpoints::ResetSyncCheckpoint())
             return error("LoadBlockIndex() : failed to reset sync-checkpoint");
     }
-
+*/
     return true;
 }
 
