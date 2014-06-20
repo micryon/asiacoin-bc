@@ -1033,8 +1033,8 @@ const int MONTHLY_BLOCKCOUNT = 43200; // 30*1440 Micryon new schedule
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int nHeight)
 {
 	int64_t nRewardCoinYear;
-
-	if(nHeight < FORK_BLOCKCOUNT)
+	nRewardCoinYear = 7.15 * MAX_MINT_PROOF_OF_STAKE;  //original ~100%
+/*	if(nHeight < FORK_BLOCKCOUNT)
 		nRewardCoinYear = 7.15 * MAX_MINT_PROOF_OF_STAKE;  //original ~100%
 	else if (nHeight < MONTHLY_BLOCKCOUNT*4)
 		nRewardCoinYear = 5.72 * MAX_MINT_PROOF_OF_STAKE;  //original ~80%
@@ -1062,7 +1062,7 @@ int64_t GetProofOfStakeReward(int64_t nCoinAge, int nHeight)
     		nRewardCoinYear = 0.2 * MAX_MINT_PROOF_OF_STAKE;  //2%
 	else
 		nRewardCoinYear = 0.1 * MAX_MINT_PROOF_OF_STAKE; //1%
-
+*/
 	int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
 	if (fDebug && GetBoolArg("-printcreation"))
         	printf("GetProofOfStakeReward(): create=%s nCoinAge=%"PRId64"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
