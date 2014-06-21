@@ -23,12 +23,12 @@ const std::string CLIENT_NAME("AsiaCoin");
 //   be defined (automatically using the export-subst git attribute), and
 //   GIT_COMMIT will contain the commit id.
 // * then, three options exist for determining CLIENT_BUILD:
-//   * if BUILD_DESC is defined, use that literally (output of git-describe)
+//   * if BUILD_DESC is defined, use that literally (output of "git describe")
 //   * if not, but GIT_COMMIT is defined, use v[maj].[min].[rev].[build]-g[commit]
 //   * otherwise, use v[maj].[min].[rev].[build]-unk
 // finally CLIENT_VERSION_SUFFIX is added
 
-// First, include build.h if requested
+// First, include build.h if requested. Use "git tag -a" to set the build version. This sets defines in build.h with the build description and date. If the working directory is not clean, a dirty flag will appear in the build specifier. 
 #ifdef HAVE_BUILD_INFO
 #    include "build.h"
 #endif
