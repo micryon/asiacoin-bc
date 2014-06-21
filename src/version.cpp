@@ -28,7 +28,10 @@ const std::string CLIENT_NAME("AsiaCoin");
 //   * otherwise, use v[maj].[min].[rev].[build]-unk
 // finally CLIENT_VERSION_SUFFIX is added
 
-// First, include build.h if requested. Use "git tag -a" to set the build version. This sets defines in build.h with the build description and date. If the working directory is not clean, a dirty flag will appear in the build specifier. 
+// First, include build.h if requested. Use "git tag -a" to set the build
+// version. This sets defines in build.h with the build description and
+// date. If the working directory is not clean, a dirty flag will appear
+// in the build specifier. 
 #ifdef HAVE_BUILD_INFO
 #    include "build.h"
 #endif
