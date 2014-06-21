@@ -13,7 +13,7 @@ First, install the required packages that your system may be missing, by executi
 
     sudo apt-get install qt4-qmake libqt4-dev build-essential libboost-dev libboost-system-dev \
         libboost-filesystem-dev libboost-program-options-dev libboost-thread-dev libssl-dev \
-        libdb5.3++-dev libminiupnpc-dev
+        libdb5.3++-dev libminiupnpc-dev libleveldb-dev
 
 then execute the following:
 
