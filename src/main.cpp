@@ -1032,42 +1032,56 @@ const int MONTHLY_BLOCKCOUNT = 43200; // 30*1440 Micryon new schedule
 
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int nHeight)
 {
-	int64_t nRewardCoinYear;
-	nRewardCoinYear = 7.15 * MAX_MINT_PROOF_OF_STAKE;  //original ~100%
-/*	if(nHeight < FORK_BLOCKCOUNT)
-		nRewardCoinYear = 7.15 * MAX_MINT_PROOF_OF_STAKE;  //original ~100%
-	else if (nHeight < MONTHLY_BLOCKCOUNT*4)
-		nRewardCoinYear = 5.72 * MAX_MINT_PROOF_OF_STAKE;  //original ~80%
-	else if (nHeight < MONTHLY_BLOCKCOUNT*6)
-    		nRewardCoinYear = 4.29 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*8)
-    		nRewardCoinYear = 2.86 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*10)
-    		nRewardCoinYear = 2.15 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*12)
-    		nRewardCoinYear = 1.43 * MAX_MINT_PROOF_OF_STAKE;
-    	else if (nHeight < MONTHLY_BLOCKCOUNT*14)
-    		nRewardCoinYear = 1.07 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*16)
-    		nRewardCoinYear = 0.72 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*18)
-    		nRewardCoinYear = 0.57 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*20)
-		nRewardCoinYear = 0.43 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*22)
-    		nRewardCoinYear = 0.29 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*24)
-    		nRewardCoinYear = 0.22 * MAX_MINT_PROOF_OF_STAKE;
-	else if (nHeight < MONTHLY_BLOCKCOUNT*48)
-    		nRewardCoinYear = 0.2 * MAX_MINT_PROOF_OF_STAKE;  //2%
-	else
-		nRewardCoinYear = 0.1 * MAX_MINT_PROOF_OF_STAKE; //1%
-*/
-	int64_t nSubsidy = nCoinAge * nRewardCoinYear / 365;
-	if (fDebug && GetBoolArg("-printcreation"))
-        	printf("GetProofOfStakeReward(): create=%s nCoinAge=%" PRI64d "\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+    int64_t nRewardMillYear;
+nRewardMillYear = 715 * MILL;      //original ~100%	
+/*
+    if(nHeight < FORK_BLOCKCOUNT)
+        nRewardMillYear = 715 * MILL;      //original ~100%
 
-	return nSubsidy;
+    else if (nHeight < MONTHLY_BLOCKCOUNT*4)
+        nRewardMillYear = 572 * MILL;      //original ~80%
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*6)
+        nRewardMillYear = 429 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*8)
+        nRewardMillYear = 286 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*10)
+        nRewardMillYear = 215 * MILL;
+
+    else if (nHeight < YEARLY_BLOCKCOUNT)
+        nRewardMillYear = 143 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*14)
+        nRewardMillYear = 107 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*16)
+        nRewardMillYear = 72 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*18)
+        nRewardMillYear = 57 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*20)
+        nRewardMillYear = 43 * MILL;
+
+    else if (nHeight < MONTHLY_BLOCKCOUNT*22)
+        nRewardMillYear = 29 * MILL;
+
+    else if (nHeight < YEARLY_BLOCKCOUNT*2)
+        nRewardMillYear = 22 * MILL;
+
+    else if (nHeight < YEARLY_BLOCKCOUNT*4)
+        nRewardMillYear = 20 * MILL;       //2%
+
+    else
+        nRewardMillYear = 10 * MILL;       //1%
+*/
+    int64_t nSubsidy = nCoinAge * nRewardMillYear / 365;
+    if (fDebug && GetBoolArg("-printcreation"))
+        printf("GetProofOfStakeReward(): create=%s nCoinAge=%" PRI64d "\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
+
+    return nSubsidy;
 }
 
 static const int64_t nTargetTimespan = 30 * 60;  
